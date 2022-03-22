@@ -263,14 +263,27 @@ func skipValidationForField(key string) bool {
 	return isFieldFamilyMatching("agent", key) ||
 		isFieldFamilyMatching("elastic_agent", key) ||
 		isFieldFamilyMatching("cloud", key) || // too many common fields
-		isFieldFamilyMatching("event", key) || // too many common fields
 		isFieldFamilyMatching("host", key) || // too many common fields
 		isFieldFamilyMatching("metricset", key) || // field is deprecated
-		isFieldFamilyMatching("event.module", key) // field is deprecated
+		isFleetManagedMapping(key)
 }
 
 func isFieldFamilyMatching(family, key string) bool {
 	return key == family || strings.HasPrefix(key, family+".")
+}
+
+// isFleetManagedMapping return true if the field is contained in a Fleet
+// managed component template that is added to all data streams.
+//
+// The template is controlled in elastic/kibana at:
+// https://github.com/elastic/kibana/blob/v8.1.0/x-pack/plugins/fleet/server/constants/fleet_es_assets.ts#L24-L39
+func isFleetManagedMapping(key string) bool {
+	switch key {
+	case "event.agent_id_status",
+		"event.ingested":
+		return true
+	}
+	return false
 }
 
 func isFieldTypeFlattened(key string, fieldDefinitions []FieldDefinition) bool {
