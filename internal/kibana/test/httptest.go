@@ -44,6 +44,7 @@ func NewClient(t *testing.T, recordFileName string) *kibana.Client {
 		kibana.Address(address),
 		kibana.Password(os.Getenv(stack.ElasticsearchPasswordEnv)),
 		kibana.Username(os.Getenv(stack.ElasticsearchUsernameEnv)),
+		kibana.APIKey(os.Getenv(stack.ElasticsearchAPIKeyEnv)),
 		kibana.CertificateAuthority(os.Getenv(stack.CACertificateEnv)),
 
 		kibana.HTTPClientSetup(setupHTTPClient),

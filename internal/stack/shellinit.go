@@ -23,6 +23,7 @@ var (
 	ElasticsearchHostEnv     = environment.WithElasticPackagePrefix("ELASTICSEARCH_HOST")
 	ElasticsearchUsernameEnv = environment.WithElasticPackagePrefix("ELASTICSEARCH_USERNAME")
 	ElasticsearchPasswordEnv = environment.WithElasticPackagePrefix("ELASTICSEARCH_PASSWORD")
+	ElasticsearchAPIKeyEnv   = environment.WithElasticPackagePrefix("API_KEY")
 	KibanaHostEnv            = environment.WithElasticPackagePrefix("KIBANA_HOST")
 	CACertificateEnv         = environment.WithElasticPackagePrefix("CA_CERT")
 )

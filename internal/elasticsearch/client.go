@@ -37,6 +37,7 @@ type clientOptions struct {
 	address  string
 	username string
 	password string
+	apiKey   string
 
 	// certificateAuthority is the certificate to validate the server certificate.
 	certificateAuthority string
@@ -65,6 +66,13 @@ func OptionWithUsername(username string) ClientOption {
 func OptionWithPassword(password string) ClientOption {
 	return func(opts *clientOptions) {
 		opts.password = password
+	}
+}
+
+// OptionWithAPIKey sets the API key to be used by the client.
+func OptionWithAPIKey(apiKey string) ClientOption {
+	return func(opts *clientOptions) {
+		opts.apiKey = apiKey
 	}
 }
 
@@ -109,8 +117,12 @@ func NewConfig(customOptions ...ClientOption) (elasticsearch.Config, error) {
 
 	config := elasticsearch.Config{
 		Addresses: []string{options.address},
-		Username:  options.username,
-		Password:  options.password,
+		APIKey:    options.apiKey,
+	}
+	// Username and password have defaults so make API take precedence.
+	if config.APIKey == "" {
+		config.Username = options.username
+		config.Password = options.password
 	}
 	if options.skipTLSVerify {
 		config.Transport = &http.Transport{
@@ -144,6 +156,11 @@ func (client *Client) CheckHealth(ctx context.Context) error {
 		return fmt.Errorf("error checking cluster health: %w", err)
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusGone {
+		// This is a serverless project that does not support cluster health.
+		return nil
+	}
 
 	if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf("failed to check cluster health: %s", resp.String())

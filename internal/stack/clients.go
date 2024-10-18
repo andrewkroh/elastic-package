@@ -23,6 +23,7 @@ func NewElasticsearchClient(customOptions ...elasticsearch.ClientOption) (*elast
 		elasticsearch.OptionWithAddress(os.Getenv(ElasticsearchHostEnv)),
 		elasticsearch.OptionWithPassword(os.Getenv(ElasticsearchPasswordEnv)),
 		elasticsearch.OptionWithUsername(os.Getenv(ElasticsearchUsernameEnv)),
+		elasticsearch.OptionWithAPIKey(os.Getenv(ElasticsearchAPIKeyEnv)),
 		elasticsearch.OptionWithCertificateAuthority(os.Getenv(CACertificateEnv)),
 	}
 	options = append(options, customOptions...)
@@ -66,6 +67,10 @@ func NewElasticsearchClientFromProfile(profile *profile.Profile, customOptions .
 	if !found {
 		elasticsearchUsername = profileConfig.ElasticsearchUsername
 	}
+	elasticsearchAPIKey, found := os.LookupEnv(ElasticsearchAPIKeyEnv)
+	if !found {
+		elasticsearchAPIKey = profileConfig.ElasticsearchAPIKey
+	}
 	caCertificate, found := os.LookupEnv(CACertificateEnv)
 	if !found {
 		caCertificate = profileConfig.CACertificatePath
@@ -75,6 +80,7 @@ func NewElasticsearchClientFromProfile(profile *profile.Profile, customOptions .
 		elasticsearch.OptionWithAddress(elasticsearchHost),
 		elasticsearch.OptionWithPassword(elasticsearchPassword),
 		elasticsearch.OptionWithUsername(elasticsearchUsername),
+		elasticsearch.OptionWithAPIKey(elasticsearchAPIKey),
 		elasticsearch.OptionWithCertificateAuthority(caCertificate),
 	}
 	options = append(options, customOptions...)
@@ -88,6 +94,7 @@ func NewKibanaClient(customOptions ...kibana.ClientOption) (*kibana.Client, erro
 		kibana.Address(os.Getenv(KibanaHostEnv)),
 		kibana.Password(os.Getenv(ElasticsearchPasswordEnv)),
 		kibana.Username(os.Getenv(ElasticsearchUsernameEnv)),
+		kibana.APIKey(os.Getenv(ElasticsearchAPIKeyEnv)),
 		kibana.CertificateAuthority(os.Getenv(CACertificateEnv)),
 	}
 	options = append(options, customOptions...)
@@ -131,6 +138,10 @@ func NewKibanaClientFromProfile(profile *profile.Profile, customOptions ...kiban
 	if !found {
 		elasticsearchUsername = profileConfig.ElasticsearchUsername
 	}
+	elasticsearchAPIKey, found := os.LookupEnv(ElasticsearchAPIKeyEnv)
+	if !found {
+		elasticsearchAPIKey = profileConfig.ElasticsearchAPIKey
+	}
 	caCertificate, found := os.LookupEnv(CACertificateEnv)
 	if !found {
 		caCertificate = profileConfig.CACertificatePath
@@ -140,6 +151,7 @@ func NewKibanaClientFromProfile(profile *profile.Profile, customOptions ...kiban
 		kibana.Address(kibanaHost),
 		kibana.Password(elasticsearchPassword),
 		kibana.Username(elasticsearchUsername),
+		kibana.APIKey(elasticsearchAPIKey),
 		kibana.CertificateAuthority(caCertificate),
 	}
 	options = append(options, customOptions...)

@@ -12,6 +12,7 @@ type InitConfig struct {
 	ElasticsearchHostPort string
 	ElasticsearchUsername string
 	ElasticsearchPassword string
+	ElasticsearchAPIKey   string
 	KibanaHostPort        string
 	CACertificatePath     string
 }
@@ -26,6 +27,7 @@ func StackInitConfig(profile *profile.Profile) (*InitConfig, error) {
 		ElasticsearchHostPort: config.ElasticsearchHost,
 		ElasticsearchUsername: config.ElasticsearchUsername,
 		ElasticsearchPassword: config.ElasticsearchPassword,
+		ElasticsearchAPIKey:   config.ElasticsearchAPIKey,
 		KibanaHostPort:        config.KibanaHost,
 		CACertificatePath:     config.CACertFile,
 	}, nil

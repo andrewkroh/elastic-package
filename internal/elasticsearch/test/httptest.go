@@ -28,6 +28,7 @@ func NewClient(t *testing.T, recordFileName string) *elasticsearch.Client {
 		elasticsearch.OptionWithAddress(address),
 		elasticsearch.OptionWithPassword(os.Getenv(stack.ElasticsearchPasswordEnv)),
 		elasticsearch.OptionWithUsername(os.Getenv(stack.ElasticsearchUsernameEnv)),
+		elasticsearch.OptionWithAPIKey(os.Getenv(stack.ElasticsearchAPIKeyEnv)),
 		elasticsearch.OptionWithCertificateAuthority(os.Getenv(stack.CACertificateEnv)),
 	)
 	require.NoError(t, err)

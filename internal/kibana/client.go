@@ -29,6 +29,7 @@ type Client struct {
 	host     string
 	username string
 	password string
+	apiKey   string
 
 	certificateAuthority string
 	tlSkipVerify         bool
@@ -115,6 +116,14 @@ func Password(password string) ClientOption {
 	}
 }
 
+// APIKey option sets the API key to be used by the client.
+func APIKey(apiKey string) ClientOption {
+	return func(c *Client) {
+		fmt.Printf("Kibana API key %s\n", apiKey)
+		c.apiKey = apiKey
+	}
+}
+
 // RetryMax configures the number of retries before failing.
 func RetryMax(retryMax int) ClientOption {
 	return func(c *Client) {
@@ -182,7 +191,12 @@ func (c *Client) newRequest(ctx context.Context, method, resourcePath string, re
 		return nil, fmt.Errorf("could not create %v request to Kibana API resource: %s: %w", method, resourcePath, err)
 	}
 
-	req.SetBasicAuth(c.username, c.password)
+	// Username and password have defaults so make API take precedence.
+	if c.apiKey != "" {
+		req.Header.Add("authorization", "ApiKey "+c.apiKey)
+	} else if c.username != "" || c.password != "" {
+		req.SetBasicAuth(c.username, c.password)
+	}
 	req.Header.Add("content-type", "application/json")
 	req.Header.Add("kbn-xsrf", install.DefaultStackVersion)
 

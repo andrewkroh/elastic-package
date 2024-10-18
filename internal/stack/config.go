@@ -23,6 +23,7 @@ type Config struct {
 	ElasticsearchHost     string `json:"elasticsearch_host,omitempty"`
 	ElasticsearchUsername string `json:"elasticsearch_username,omitempty"`
 	ElasticsearchPassword string `json:"elasticsearch_password,omitempty"`
+	ElasticsearchAPIKey   string `json:"elasticsearch_api_key,omitempty"`
 	KibanaHost            string `json:"kibana_host,omitempty"`
 	CACertFile            string `json:"ca_cert_file,omitempty"`
 }
@@ -89,4 +90,5 @@ func printUserConfig(printer Printer, config Config) {
 	printer.Printf("Kibana host: %s\n", config.KibanaHost)
 	printer.Printf("Username: %s\n", config.ElasticsearchUsername)
 	printer.Printf("Password: %s\n", config.ElasticsearchPassword)
+	printer.Printf("API key: %s\n", config.ElasticsearchAPIKey)
 }
