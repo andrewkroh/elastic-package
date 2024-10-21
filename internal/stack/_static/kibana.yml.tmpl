@@ -139,6 +139,9 @@ xpack.fleet.outputs:
     {{ else }}
     preset: latency
     {{ end }}
+    config:
+      proxy_url: http://mitmproxy:8080
+      ssl.verification_mode: none
 
   {{ $logstash_enabled := fact "logstash_enabled" }}
   {{ if eq $logstash_enabled "true" }}

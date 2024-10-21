@@ -167,6 +167,17 @@ services:
       elastic-agent:
         condition: service_healthy
 
+  mitmproxy:
+    image: mitmproxy/mitmproxy
+    ports:
+      - "8080"
+    command: mitmdump --ssl-insecure -w /tmp/service_logs/proxy-dump.mitm
+    volumes:
+    - "../certs/ca-cert.pem:/etc/ssl/certs/elastic-package.pem"
+    - type: bind
+      source: ../../../tmp/service_logs/
+      target: /tmp/service_logs/
+
 {{ $logstash_enabled := fact "logstash_enabled" }}
 {{ if eq $logstash_enabled "true" }}
   logstash:
