@@ -35,5 +35,6 @@ def request(flow: http.HTTPFlow) -> None:
                 # Append the event line to the output file if it exists
                 if event_line:
                     with open(data_stream, "a") as f:
+                        f.write(control_line + "\n")
                         f.write(event_line + "\n")
 
